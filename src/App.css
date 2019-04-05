@@ -31,3 +31,8 @@
     transform: rotate(360deg);
   }
 }
+
+.chat-logs {
+  list-style-type: none;
+  color: slategray;
+}
