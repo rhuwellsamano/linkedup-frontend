@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { logoutUser, updateUserStatus, toggleVisible } from './actions'
 import { connect } from 'react-redux'
-import { Menu } from 'semantic-ui-react'
+import { Menu, Icon } from 'semantic-ui-react'
 
 const mapDispatchToProps = dispatch => ({
   logoutUser: () => dispatch(logoutUser()),
@@ -28,23 +28,25 @@ class Navbar extends Component {
     const { visible } = this.props.visible
     return (
       <div>
-        <Menu fixed="top">
-          <Menu.Item disabled={visible} onClick={ this.toggleClick }>
-            <span role="img" aria-label="Burger">🍔</span>
+        <Menu inverted fixed="top">
+          <Menu.Item name='content' disabled={visible} position="left" onClick={ this.toggleClick }>
+              <Icon name='content' />
           </Menu.Item>
           <Link to="/profile">
             <Menu.Item
               name='profile'
               active={activeItem === 'profile'}
               onClick={this.handleItemClick}>
+              <Icon name='id card' />
               Profile
             </Menu.Item>
           </Link>
           <Link to="/">
             <Menu.Item
-              name='profile'
+              name='chatroom'
               active={activeItem === 'chatroom'}
               onClick={this.handleItemClick}>
+              <Icon name='users' />
               Chatroom
             </Menu.Item>
           </Link>
@@ -52,12 +54,15 @@ class Navbar extends Component {
             <Menu.Item
               name='signup'
               active={activeItem === 'signup'}
+              position="right"
               onClick={this.handleItemClick}>
+              <Icon name='signup'/>
               Sign Up
             </Menu.Item>
           </Link> : <Menu.Item
             name='logout'
             active={activeItem === 'logout'}
+            position="right"
             onClick={() => {
               localStorage.removeItem("token");
               this.props.logoutUser();
@@ -66,13 +71,16 @@ class Navbar extends Component {
               // this.handleItemClick()
             }}
           >
+          <Icon name='log out'/>
             Log Out
           </Menu.Item> }
           { !localStorage.token ? <Link to="/login">
             <Menu.Item
               name='login'
               active={activeItem === 'login'}
+              position="right"
               onClick={this.handleItemClick}>
+            <Icon name='sign-out'/>
               Log In
             </Menu.Item>
           </Link> : null }

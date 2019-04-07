@@ -255,6 +255,7 @@ renderChatLog() {
                      { this.renderChatLog() }
                      <br></br>
                      <br></br>
+                     <br></br>
 
                   </Comment.Group>
                 </div>

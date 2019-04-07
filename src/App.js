@@ -13,7 +13,7 @@ import Signup from './Signup'
 import Login from './Login'
 import Profile from './Profile'
 import EditProfile from './EditProfile'
-import { Menu, Segment, Sidebar } from 'semantic-ui-react'
+import { Menu, Segment, Sidebar, Icon } from 'semantic-ui-react'
 import { serverAddress } from './ServerAddress'
 import { toggleVisible } from './actions'
 import UserProfile from './UserProfile'
@@ -63,7 +63,7 @@ class App extends Component {
   render() {
     const { visible } = this.props
 
-    let arrayOfOnlineUsers = this.state.userList.map((user, index) => <Link to={`/users/${user.id}`}><Menu.Item as="a"> {user.username} : { user.online ? "✅" : "❌" } </Menu.Item></Link>)
+    let arrayOfOnlineUsers = this.state.userList.map((user, index) => <Link to={`/users/${user.id}`}><Menu.Item as="a"> {user.username} : { user.online ? <Icon name="check circle"/> : <Icon name="remove circle"/> } </Menu.Item></Link>)
 
     return (
       <div>
