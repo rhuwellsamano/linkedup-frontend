@@ -3,7 +3,7 @@ import './App.css';
 import Cable from 'actioncable'
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { chatLogsGetFetch, getProfileFetch, addChatLog } from './actions/index';
+import { chatLogsGetFetch, getProfileFetch, addChatLog, loadChatLogs } from './actions/index';
 
 
 const mapStateToProps = state => {
@@ -16,8 +16,23 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     chatLogsGetFetch: () => dispatch(chatLogsGetFetch()),
     getProfileFetch: () => dispatch(getProfileFetch()),
-    addChatLog: (chatLog) => dispatch(addChatLog(chatLog))
+    addChatLog: (chatLog) => dispatch(addChatLog(chatLog)),
+    loadChatLogs: () => dispatch(loadChatLogs())
   })
+
+  const getRandomColor = () => {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+  const divStyle = {
+    color: getRandomColor(),
+  };
+
 
 class App extends Component {
   _isMounted = false;
@@ -40,6 +55,8 @@ class App extends Component {
 
   componentWillUnmount() {
     this._isMounted = false;
+    this.chats.unsubscribe()
+    console.log("unmounted")
   }
 
   updateCurrentChatMessage(event) {
@@ -53,10 +70,11 @@ class App extends Component {
   handleSendEvent(event) {
     event.preventDefault();
     if (this._isMounted) {
-      this.chats.create(this.state.currentChatMessage);
+      this.chats.create(this.state.currentChatMessage, this.props.current_user.username);
       this.setState({
         currentChatMessage: ''
       });
+      // play sound here
     };
   }
 
@@ -75,14 +93,16 @@ class App extends Component {
 //     });
 //   }
 
+
+
 renderChatLog() {
   return this.props.chatLogs.map((el) => {
     return (
       <div>
         <li key={`chat_${el.id}`}>
-          <span className='chat-user'><strong>{ this.props.current_user.username }</strong> says: </span>
+          <span className='chat-user' style={divStyle}><strong>{ el.user }</strong> says: </span>
           <span className='chat-message'><em>{ el.content }</em></span>
-          <span className='chat-created-at'> { el.created_at }</span>
+          <span className='chat-created-at'>     sent: { el.created_at }</span>
         </li>
     </div>
     );
@@ -103,7 +123,9 @@ renderChatLog() {
     }, {
       connected: () => {},
       received: (data) => {
-        let chatLogs = this.state.chatLogs;
+        // below was the original line
+        // let chatLogs = this.state.chatLogs;
+        let chatLogs = this.props.chatLogs;
         chatLogs.push(data);
         if (this._isMounted) {
           this.setState({
@@ -113,9 +135,10 @@ renderChatLog() {
           this.props.addChatLog(chatLogs)
         }
       },
-        create: function(chatContent) {
+        create: function(chatContent, user) {
           this.perform('create', {
-            content: chatContent
+            content: chatContent,
+            user: user
           });
         }
       });

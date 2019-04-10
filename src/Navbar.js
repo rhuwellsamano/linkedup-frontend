@@ -1,7 +1,8 @@
 import React from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { logoutUser } from './actions'
 import { connect } from 'react-redux'
+// import Cable from 'actioncable'
 
 const mapDispatchToProps = dispatch => ({
   logoutUser: () => dispatch(logoutUser())

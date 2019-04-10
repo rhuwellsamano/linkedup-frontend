@@ -98,7 +98,7 @@ export const logoutUser = () => ({
 
 
 
-const loadChatLogs = chatLogs => {
+export const loadChatLogs = chatLogs => {
   return {
     type: "LOAD_CHATLOGS",
     payload: chatLogs
