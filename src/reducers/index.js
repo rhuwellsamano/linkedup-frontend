@@ -1,7 +1,8 @@
 // initial state
 const initialState = {
   current_user: {},
-  chatLogs: ["test"]
+  currentChatMessage: "",
+  chatLogs: []
 }
 
 // the Dispatcher who gets alert text messages from us and sends/returns the applicable specialized  fireteam to handle them

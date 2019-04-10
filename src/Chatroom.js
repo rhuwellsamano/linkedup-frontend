@@ -80,7 +80,7 @@ class App extends Component {
   }
 
   createSocket() {
-    let cable = Cable.createConsumer('ws://192.168.1.9:3001/cable');
+    let cable = Cable.createConsumer('ws://10.39.105.71:3001/cable');
     // let cable = Cable.createConsumer('ws://10.39.111.52:3001/cable');
     this.chats = cable.subscriptions.create({
       channel: 'ChatChannel'
