@@ -36,3 +36,11 @@
   list-style-type: none;
   color: slategray;
 }
+
+.login-container {
+  text-align: center;
+}
+
+.app-name {
+  text-align: center;
+}
