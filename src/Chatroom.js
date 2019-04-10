@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import Cable from 'actioncable'
 import { Link, Redirect } from 'react-router-dom';
-import {connect} from 'react-redux';
-import {chatLogsGetFetch} from './actions/index';
-import {getProfileFetch} from './actions/index';
+import { connect } from 'react-redux';
+import { chatLogsGetFetch, getProfileFetch, addChatLog } from './actions/index';
 
 
 const mapStateToProps = state => {
@@ -14,12 +13,11 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
+const mapDispatchToProps = dispatch => ({
     chatLogsGetFetch: () => dispatch(chatLogsGetFetch()),
-    getProfileFetch: () => dispatch(getProfileFetch())
-  }
-}
+    getProfileFetch: () => dispatch(getProfileFetch()),
+    addChatLog: (chatLog) => dispatch(addChatLog(chatLog))
+  })
 
 class App extends Component {
   _isMounted = false;
@@ -58,20 +56,38 @@ class App extends Component {
       this.chats.create(this.state.currentChatMessage);
       this.setState({
         currentChatMessage: ''
-      })
+      });
     };
   }
 
-  renderChatLog() {
-    return this.state.chatLogs.map((el) => {
-      return (
+// ORIGINAL
+//   renderChatLog() {
+//     return this.state.chatLogs.map((el) => {
+//       return (
+//         <div>
+//           <li key={`chat_${el.id}`}>
+//             <span className='chat-user'><strong>{ this.props.current_user.username }</strong> says: </span>
+//             <span className='chat-message'><em>{ el.content }</em></span>
+//             <span className='chat-created-at'> { el.created_at }</span>
+//           </li>
+//       </div>
+//       );
+//     });
+//   }
+
+renderChatLog() {
+  return this.props.chatLogs.map((el) => {
+    return (
+      <div>
         <li key={`chat_${el.id}`}>
-          <span className='chat-message'>{ el.content }</span>
+          <span className='chat-user'><strong>{ this.props.current_user.username }</strong> says: </span>
+          <span className='chat-message'><em>{ el.content }</em></span>
           <span className='chat-created-at'> { el.created_at }</span>
         </li>
-      );
-    });
-  }
+    </div>
+    );
+  });
+}
 
   handleChatInputKeyPress(event) {
     if(event.key === 'Enter') {
@@ -90,7 +106,11 @@ class App extends Component {
         let chatLogs = this.state.chatLogs;
         chatLogs.push(data);
         if (this._isMounted) {
-          this.setState({ chatLogs: chatLogs });
+          this.setState({
+            chatLogs: chatLogs
+          });
+          console.log(chatLogs)
+          this.props.addChatLog(chatLogs)
         }
       },
         create: function(chatContent) {

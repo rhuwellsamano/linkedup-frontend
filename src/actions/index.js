@@ -11,24 +11,6 @@ export const addUserToState = userObj => {
   }
 }
 
-const loadChatLogs = chatLogs => {
-  return {
-    type: "LOAD_CHATLOGS",
-    payload: chatLogs
-  }
-}
-
-export const chatLogsGetFetch = () => {
-  return (dispatch) => {
-    return fetch(`${server}/api/v1/chatLogs`)
-    .then(res => res.json())
-    .then(chatLogs => {
-      console.log("chatLogsGetFetch:", chatLogs)
-      dispatch(loadChatLogs(chatLogs))
-    })
-  }
-}
-
 export const userPostFetch = user => {
   return dispatch => {
     return fetch(`${server}/api/v1/users`, {
@@ -112,3 +94,39 @@ export const getProfileFetch = () => {
 export const logoutUser = () => ({
   type: "LOGOUT_USER"
 })
+
+
+
+
+const loadChatLogs = chatLogs => {
+  return {
+    type: "LOAD_CHATLOGS",
+    payload: chatLogs
+  }
+}
+
+// export const addChatLog = chatLog => {
+//   return dispatch => {
+//     console.log('chatlog sent:', chatLog)
+//     return {
+//       type: "ADD_CHATLOG",
+//       payload: chatLog
+//     }
+//   }
+// }
+
+export const addChatLog = updatedChatLog => ({
+  type: "ADD_CHATLOG",
+  payload: updatedChatLog
+})
+
+export const chatLogsGetFetch = () => {
+  return (dispatch) => {
+    return fetch(`${server}/api/v1/chatLogs`)
+    .then(res => res.json())
+    .then(chatLogs => {
+      console.log("chatLogsGetFetch:", chatLogs)
+      dispatch(loadChatLogs(chatLogs))
+    })
+  }
+}
