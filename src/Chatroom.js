@@ -65,10 +65,13 @@ class App extends Component {
   renderChatLog() {
     return this.state.chatLogs.map((el) => {
       return (
-        <li key={`chat_${el.id}`}>
-          <span className='chat-message'>{ el.content }</span>
-          <span className='chat-created-at'> { el.created_at }</span>
-        </li>
+        <div>
+          <li key={`chat_${el.id}`}>
+            <span className='chat-user'>{ this.props.current_user.username } says: </span>
+            <span className='chat-message'>{ el.content }</span>
+            <span className='chat-created-at'> (sent:{ el.created_at })</span>
+          </li>
+      </div>
       );
     });
   }
@@ -80,7 +83,7 @@ class App extends Component {
   }
 
   createSocket() {
-    let cable = Cable.createConsumer('ws://192.168.1.9:3001/cable');
+    let cable = Cable.createConsumer('ws://10.39.105.71:3001/cable');
     // let cable = Cable.createConsumer('ws://10.39.111.52:3001/cable');
     this.chats = cable.subscriptions.create({
       channel: 'ChatChannel'
@@ -132,7 +135,7 @@ class App extends Component {
                 </button>
 
               </div>
-
+            <br></br>
                 <Link to="/splash"><button>Back Home</button></Link>
 
           </div>

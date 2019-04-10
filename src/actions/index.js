@@ -2,7 +2,7 @@
 // fetch is kind of like an action that activates on "FETCH" and expects to get back data from the server (JSON)
 // who want that Action??
 
-let server = 'http://192.168.1.9:3001'
+let server = 'http://10.39.105.71:3001'
 
 export const addUserToState = userObj => {
   return {
