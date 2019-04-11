@@ -2,7 +2,9 @@
 // fetch is kind of like an action that activates on "FETCH" and expects to get back data from the server (JSON)
 // who want that Action??
 
-let server = 'http://10.39.105.71:3001'
+import { serverAddress } from '../ServerAddress'
+
+let server = `http://${serverAddress}:3001`
 
 export const addUserToState = userObj => {
   return {

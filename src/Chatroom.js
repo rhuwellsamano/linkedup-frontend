@@ -4,6 +4,7 @@ import Cable from 'actioncable'
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { chatLogsGetFetch, getProfileFetch, addChatLog, loadChatLogs } from './actions/index';
+import { serverAddress } from './ServerAddress'
 
 
 const mapStateToProps = state => {
@@ -116,7 +117,7 @@ renderChatLog() {
   }
 
   createSocket() {
-    let cable = Cable.createConsumer('ws://10.39.105.71:3001/cable');
+    let cable = Cable.createConsumer(`ws://${serverAddress}:3001/cable`);
     // let cable = Cable.createConsumer('ws://10.39.111.52:3001/cable');
     this.chats = cable.subscriptions.create({
       channel: 'ChatChannel'
