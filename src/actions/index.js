@@ -62,6 +62,7 @@ export const userLoginFetch = user => {
         } else {
           localStorage.setItem("token", data.jwt);
           dispatch(loginUser(data.user))
+          dispatch(updateUserStatus(data.user))
         }
       })
   }
@@ -132,3 +133,43 @@ export const chatLogsGetFetch = () => {
     })
   }
 }
+
+export const updateUserStatus = (userObj) => {
+  console.log('userObj:', userObj)
+
+  let userStatus = (!userObj.online ? "true" : "false")
+
+  return (dispatch) => {
+      return fetch(`${server}/api/v1/users/${userObj.id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            online: userStatus
+          })
+    })
+
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///

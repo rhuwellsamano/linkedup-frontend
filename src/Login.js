@@ -1,7 +1,17 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {userLoginFetch} from './actions';
+import {userLoginFetch } from './actions';
 import { Redirect } from 'react-router-dom'
+
+
+const mapStateToProps = state => ({
+  current_user: state.current_user
+})
+
+const mapDispatchToProps = dispatch => ({
+  userLoginFetch: userInfo => dispatch(userLoginFetch(userInfo)),
+})
+
 
 class Login extends Component {
   state = {
@@ -52,12 +62,5 @@ class Login extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  current_user: state.current_user
-})
-
-const mapDispatchToProps = dispatch => ({
-  userLoginFetch: userInfo => dispatch(userLoginFetch(userInfo))
-})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

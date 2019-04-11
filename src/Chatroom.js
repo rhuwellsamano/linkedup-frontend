@@ -5,6 +5,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { chatLogsGetFetch, getProfileFetch, addChatLog, loadChatLogs } from './actions/index';
 import { serverAddress } from './ServerAddress'
+import UserStatus from './UserStatus'
 
 
 const mapStateToProps = state => {
@@ -40,12 +41,24 @@ class App extends Component {
 
   state = {
     currentChatMessage: '',
-    chatLogs: []
+    chatLogs: [],
+    userList: []
   }
 
   componentDidMount = () => {
-  this.props.getProfileFetch()
-}
+    this.props.getProfileFetch();
+    fetch(`http://${serverAddress}:3001/api/v1/users`, {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    })
+    .then(res => res.json())
+    .then(userList => this.setState({
+      userList: userList
+    }))
+  }
 
   componentWillMount() {
     if (this._isMounted === false) {
@@ -78,21 +91,6 @@ class App extends Component {
       // play sound here
     };
   }
-
-// ORIGINAL
-//   renderChatLog() {
-//     return this.state.chatLogs.map((el) => {
-//       return (
-//         <div>
-//           <li key={`chat_${el.id}`}>
-//             <span className='chat-user'><strong>{ this.props.current_user.username }</strong> says: </span>
-//             <span className='chat-message'><em>{ el.content }</em></span>
-//             <span className='chat-created-at'> { el.created_at }</span>
-//           </li>
-//       </div>
-//       );
-//     });
-//   }
 
 
 
@@ -143,11 +141,36 @@ renderChatLog() {
           });
         }
       });
+///
+      this.appearances = cable.subscriptions.create({
+        channel: "AppearanceChannel"
+      }, {
+        connected: () => {console.log('AppearanceChannel connected!')},
+        received: (data) => {
+          console.log('data', data)
+          let item = JSON.parse(data);
+          let index = this.state.userList.findIndex(user => user.id === item.id);
+          let updatedUserList = [
+            ...this.state.userList.slice(0, index),
+            item,
+            ...this.state.userList.slice(index + 1)
+          ];
+          this.setState({ userList: updatedUserList });
+        },
+        online: () => {
+
+        }
+    });
+      console.log('CHATROOM STATE:', this.state.userList)
+///
   }
 
   render() {
 
     if (localStorage.token) {
+
+      let arrayOfOnlineUsers = this.state.userList.map((user, index) => <UserStatus key={user.id} user={user} online={user.online}/>)
+
       return (
         <div>
           <div className='App'>
@@ -180,6 +203,13 @@ renderChatLog() {
                 <Link to="/splash"><button>Back Home</button></Link>
 
           </div>
+
+          <div className='online-users'>
+             <h4>Whose Online?!</h4>
+             { arrayOfOnlineUsers }
+          </div>
+
+
       </div>
       );
     } else {
