@@ -1,32 +1,39 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { logoutUser, updateUserStatus } from './actions'
+import { logoutUser, updateUserStatus, toggleVisible } from './actions'
 import { connect } from 'react-redux'
 import { Menu } from 'semantic-ui-react'
 
 const mapDispatchToProps = dispatch => ({
   logoutUser: () => dispatch(logoutUser()),
-  updateUserStatus: (userObj) => dispatch(updateUserStatus(userObj))
+  updateUserStatus: (userObj) => dispatch(updateUserStatus(userObj)),
+  toggleVisible: () => dispatch(toggleVisible())
 })
 
 const mapStateToProps = state => ({
-  current_user: state.current_user
+  current_user: state.current_user,
+  visible: state.visible
 })
 
 class Navbar extends Component {
 
   state = {
-
+    activeItem: {}
   }
 
-  // handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+  toggleClick = () => this.props.toggleVisible()
+
+  handleHideClick = () => this.setState({ visible: false })
+  handleShowClick = () => this.setState({ visible: true })
+  handleSidebarHide = () => this.setState({ visible: false })
 
   render() {
-    const { activeItem } = this.state
+    const { activeItem } = this.state.activeItem
+    const { visible } = this.props.visible
     return (
       <div>
-        <Menu>
-          <Menu.Item>
+        <Menu fixed="top">
+          <Menu.Item disabled={visible} onClick={ this.toggleClick }>
             <span>🍔</span>
           </Menu.Item>
           <Link to="/profile">

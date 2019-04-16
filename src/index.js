@@ -19,7 +19,7 @@ const store = createStore(reducer, composeWithDevTools(
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <div>
+      <div className='entire-app'>
         <App/>
       </div>
     </BrowserRouter>

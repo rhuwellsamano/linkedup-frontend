@@ -154,8 +154,9 @@ export const updateUserStatus = (userObj) => {
   }
 }
 
-
-
+export const toggleVisible = () => ({
+    type: "TOGGLE_VISIBLE"
+})
 
 
 

@@ -1,7 +1,8 @@
 // initial state
 const initialState = {
   current_user: {},
-  chatLogs: []
+  chatLogs: [],
+  visible: true
 }
 
 // the Dispatcher who gets alert text messages from us and sends/returns the applicable specialized  fireteam to handle them
@@ -15,8 +16,10 @@ export default function reducer(state = initialState, action) {
       case "LOAD_CHATLOGS":
         return {...state, chatLogs: action.payload}
       case "ADD_CHATLOG":
-      console.log('reducer says:', action.payload)
-      return {...state, chatLogs: action.payload}
+        console.log('reducer says:', action.payload)
+        return {...state, chatLogs: action.payload}
+      case "TOGGLE_VISIBLE":
+        return {...state, visible: !state.visible}
     default:
       return state;
   }

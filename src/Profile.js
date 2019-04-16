@@ -15,7 +15,9 @@ class Profile extends Component {
   render() {
     console.log(this.props.current_user)
     return (
+      <div className="profile-page">
       <h1>PROFILE</h1>
+    </div>
     )
   }
 

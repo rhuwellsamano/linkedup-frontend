@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import './App.css';
 // import Cable from 'actioncable'
 // import { Link } from 'react-router-dom';
@@ -12,20 +12,22 @@ import Chatroom from './Chatroom'
 import Signup from './Signup'
 import Login from './Login'
 import Profile from './Profile'
-import { Button, Header, Icon, Image, Menu, Segment, Sidebar } from 'semantic-ui-react'
+import { Button, Header, Icon, Image, Menu, Segment, Sidebar, Sticky } from 'semantic-ui-react'
 import { serverAddress } from './ServerAddress'
+import { toggleVisible } from './actions'
 
 
 // import Welcome from './Welcome'
 
-// const mapStateToProps = state => {
-//   return {
-//     current_user: state.current_user
-//   }
-// }
+const mapStateToProps = state => {
+  return {
+    visible: state.visible
+  }
+}
 
 const mapDispatchToProps = dispatch => ({
-  getProfileFetch: () => dispatch(getProfileFetch())
+  getProfileFetch: () => dispatch(getProfileFetch()),
+  toggleVisible: () => dispatch(toggleVisible())
 })
 
 class App extends Component {
@@ -54,14 +56,20 @@ class App extends Component {
     }))
   }
 
-  render() {
-    const { visible } = this.state
+  contextRef = createRef()
 
-    let arrayOfOnlineUsers = this.state.userList.map((user, index) => <Menu.Item as="a"> {user.username} : { user.online ? "ONLINE" : "OFFLINE" } </Menu.Item>)
+  render() {
+    const { visible } = this.props
+
+    let arrayOfOnlineUsers = this.state.userList.map((user, index) => <Menu.Item as="a"> {user.username} : { user.online ? "✅" : "❌" } </Menu.Item>)
 
     return (
       <div>
-        <Route component={Navbar} />
+        <div className="">
+          <div>
+          <Route component={Navbar} />
+        </div>
+      </div>
 
           <div>
             <Button.Group>
@@ -76,7 +84,6 @@ class App extends Component {
                 animation='overlay'
                 icon='labeled'
                 inverted
-                onHide={this.handleSidebarHide}
                 vertical
                 visible={visible}
                 width='thin'
@@ -115,5 +122,5 @@ class App extends Component {
   }
 }
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
 // export default withRouter(App);

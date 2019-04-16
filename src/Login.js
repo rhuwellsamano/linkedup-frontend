@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {userLoginFetch } from './actions';
 import { Redirect } from 'react-router-dom'
+import { Form } from 'semantic-ui-react'
 
 
 const mapStateToProps = state => ({
@@ -36,9 +37,10 @@ class Login extends Component {
     }
 
     return (
-      <form onSubmit={this.handleSubmit}>
+      <Form onSubmit={this.handleSubmit}>
         <h1>Login</h1>
 
+      <Form.Field>
         <label>Username</label>
         <input
           name='username'
@@ -46,7 +48,9 @@ class Login extends Component {
           value={this.state.username}
           onChange={this.handleChange}
           /><br/>
+      </Form.Field>
 
+      <Form.Field>
         <label>Password</label>
         <input
           type='password'
@@ -55,9 +59,11 @@ class Login extends Component {
           value={this.state.password}
           onChange={this.handleChange}
           /><br/>
-
-        <input type='submit'/>
-      </form>
+      </Form.Field>
+      <Form.Button>
+        Submit
+      </Form.Button>
+      </Form>
     )
   }
 }
