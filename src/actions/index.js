@@ -137,7 +137,7 @@ export const chatLogsGetFetch = () => {
 export const updateUserStatus = (userObj) => {
   console.log('userObj:', userObj)
 
-  let userStatus = (!userObj.online ? "true" : "false")
+  let userStatus = (!userObj.online ? 'true' : 'false')
 
   return (dispatch) => {
       return fetch(`${server}/api/v1/users/${userObj.id}`, {

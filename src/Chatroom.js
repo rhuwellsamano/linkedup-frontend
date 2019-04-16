@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { chatLogsGetFetch, getProfileFetch, addChatLog, loadChatLogs } from './actions/index';
 import { serverAddress } from './ServerAddress'
 import UserStatus from './UserStatus'
+// import  { audio1, playMessageSent } from './audio'
+import SidebarExampleSidebar from './Sidebar'
 
 
 const mapStateToProps = state => {
@@ -83,12 +85,16 @@ class App extends Component {
 
   handleSendEvent(event) {
     event.preventDefault();
-    if (this._isMounted) {
+    if (this.state.currentChatMessage === '') {
+      console.log("Type something in, first!")
+    }
+    if (this._isMounted && this.state.currentChatMessage !== '') {
       this.chats.create(this.state.currentChatMessage, this.props.current_user.username);
       this.setState({
         currentChatMessage: ''
       });
       // play sound here
+      // playMessageSent()
     };
   }
 
@@ -169,10 +175,8 @@ renderChatLog() {
 
     if (localStorage.token) {
 
-      let arrayOfOnlineUsers = this.state.userList.map((user, index) => <UserStatus key={user.id} user={user} online={user.online}/>)
-
       return (
-        <div>
+        <div className='chatbox'>
           <div className='App'>
 
               <div className='stage'>
@@ -203,12 +207,6 @@ renderChatLog() {
                 <Link to="/splash"><button>Back Home</button></Link>
 
           </div>
-
-          <div className='online-users'>
-             <h4>Whose Online?!</h4>
-             { arrayOfOnlineUsers }
-          </div>
-
 
       </div>
       );

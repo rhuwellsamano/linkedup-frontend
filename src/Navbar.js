@@ -1,8 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { logoutUser, updateUserStatus } from './actions'
 import { connect } from 'react-redux'
-// import Cable from 'actioncable'
+import { Menu } from 'semantic-ui-react'
 
 const mapDispatchToProps = dispatch => ({
   logoutUser: () => dispatch(logoutUser()),
@@ -13,36 +13,72 @@ const mapStateToProps = state => ({
   current_user: state.current_user
 })
 
-const Navbar = props => {
-  return (
-    <div>
-      <h4> { props.current_user.username }</h4>
-      <ul>
-        <Link to="/profile">
-          <li>Profile</li>
-        </Link>
-        <Link to="/">
-          <li>Chatroom</li>
-        </Link>
-        <Link to="/signup">
-          <li>Sign Up</li>
-        </Link>
-        <Link to="/login">
-          <li>Log In</li>
-        </Link>
-        <li
-          onClick={() => {
-            localStorage.removeItem("token");
-            props.logoutUser();
-            props.history.push("/login");
-            props.updateUserStatus(props.current_user)
-          }}
-        >
-          Log Out
-        </li>
-      </ul>
-  </div>
-  );
+class Navbar extends Component {
+
+  state = {
+
+  }
+
+  // handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+
+  render() {
+    const { activeItem } = this.state
+    return (
+      <div>
+        <Menu>
+          <Menu.Item>
+            <span>🍔</span>
+          </Menu.Item>
+          <Link to="/profile">
+            <Menu.Item
+              name='profile'
+              active={activeItem === 'profile'}
+              onClick={this.handleItemClick}>
+              Profile
+            </Menu.Item>
+          </Link>
+          <Link to="/">
+            <Menu.Item
+              name='profile'
+              active={activeItem === 'chatroom'}
+              onClick={this.handleItemClick}>
+              Chatroom
+            </Menu.Item>
+          </Link>
+          { !localStorage.token ? <Link to="/signup">
+            <Menu.Item
+              name='signup'
+              active={activeItem === 'signup'}
+              onClick={this.handleItemClick}>
+              Sign Up
+            </Menu.Item>
+          </Link> : <Menu.Item
+            name='logout'
+            active={activeItem === 'logout'}
+            onClick={() => {
+              localStorage.removeItem("token");
+              this.props.logoutUser();
+              this.props.history.push("/login");
+              this.props.updateUserStatus(this.props.current_user);
+              // this.handleItemClick()
+            }}
+          >
+            Log Out
+          </Menu.Item> }
+          { !localStorage.token ? <Link to="/login">
+            <Menu.Item
+              name='login'
+              active={activeItem === 'login'}
+              onClick={this.handleItemClick}>
+              Log In
+            </Menu.Item>
+          </Link> : null }
+
+
+      </Menu>
+    </div>
+    );
+  }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

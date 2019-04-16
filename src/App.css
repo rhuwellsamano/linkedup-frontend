@@ -44,3 +44,9 @@
 .app-name {
   text-align: center;
 }
+
+.chatbox {
+  height:85vh;
+  max-height:85vh;
+  overflow:auto;
+}
