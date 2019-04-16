@@ -2,7 +2,7 @@
 const initialState = {
   current_user: {},
   chatLogs: [],
-  visible: true
+  visible: false
 }
 
 // the Dispatcher who gets alert text messages from us and sends/returns the applicable specialized  fireteam to handle them

@@ -23,10 +23,6 @@ class Navbar extends Component {
 
   toggleClick = () => this.props.toggleVisible()
 
-  handleHideClick = () => this.setState({ visible: false })
-  handleShowClick = () => this.setState({ visible: true })
-  handleSidebarHide = () => this.setState({ visible: false })
-
   render() {
     const { activeItem } = this.state.activeItem
     const { visible } = this.props.visible
@@ -34,7 +30,7 @@ class Navbar extends Component {
       <div>
         <Menu fixed="top">
           <Menu.Item disabled={visible} onClick={ this.toggleClick }>
-            <span>🍔</span>
+            <span role="img" aria-label="Burger">🍔</span>
           </Menu.Item>
           <Link to="/profile">
             <Menu.Item

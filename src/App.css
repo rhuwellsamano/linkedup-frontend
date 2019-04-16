@@ -1,8 +1,8 @@
 .App {
-  text-align: center;
+  /* text-align: right; */
     height:100&;
     max-height:100vh;
-    overflow:auto;
+    /* overflow:auto; */
 }
 
 .App-logo {
@@ -51,11 +51,20 @@
 .entire-app {
   height:100vh;
   max-height:100vh;
-  overflow:auto;
+  /* overflow:auto; */
 }
 
 .chatbox, .profile-page {
   min-height:87vh;
   max-height:100vh;
   /* overflow:auto; */
+}
+
+.chat-input {
+  width: 100vw;
+  /* size: 600px; */
+}
+
+.right {
+  float:right;
 }

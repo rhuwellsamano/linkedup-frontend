@@ -70,14 +70,11 @@ class App extends Component {
           <Route component={Navbar} />
         </div>
       </div>
+<br></br>
+  <br></br>
+
 
           <div>
-            <Button.Group>
-              <Button disabled={visible} onClick={ !this.state.visible ? this.handleShowClick : this.handleHideClick}>
-                Show sidebar
-              </Button>
-            </Button.Group>
-
             <Sidebar.Pushable as={Segment}>
               <Sidebar
                 as={Menu}
@@ -105,11 +102,6 @@ class App extends Component {
 
             </Sidebar.Pushable>
           </div>
-
-
-
-
-
 
 
 

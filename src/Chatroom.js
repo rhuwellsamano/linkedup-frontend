@@ -8,6 +8,9 @@ import { serverAddress } from './ServerAddress'
 import UserStatus from './UserStatus'
 // import  { audio1, playMessageSent } from './audio'
 import SidebarExampleSidebar from './Sidebar'
+import { Menu, Input, Comment } from 'semantic-ui-react'
+import ducky from './duck.png'
+
 
 
 const mapStateToProps = state => {
@@ -98,18 +101,31 @@ class App extends Component {
     };
   }
 
+//   <div>
+//     <li key={`chat_${el.id}`}>
+//       <span className='chat-user' style={divStyle}><strong>{ el.user }</strong> says: </span>
+//       <span className='chat-message'>{ el.content }</span>
+//       <span className='chat-created-at'>     sent: { el.created_at }</span>
+//     </li>
+// </div>
+
 
 
 renderChatLog() {
   return this.props.chatLogs.map((el) => {
     return (
-      <div>
-        <li key={`chat_${el.id}`}>
-          <span className='chat-user' style={divStyle}><strong>{ el.user }</strong> says: </span>
-          <span className='chat-message'><em>{ el.content }</em></span>
-          <span className='chat-created-at'>     sent: { el.created_at }</span>
-        </li>
-    </div>
+
+    <Comment key={`chat_{el.id}`}>
+      <Comment.Avatar src={ ducky } />
+      <Comment.Content>
+        <Comment.Author>{ el.user }</Comment.Author>
+        <Comment.Metadata>
+          <div>sent: { el.created_at }</div>
+        </Comment.Metadata>
+        <Comment.Text>{ el.content }</Comment.Text>
+      </Comment.Content>
+    </Comment>
+
     );
   });
 }
@@ -176,39 +192,36 @@ renderChatLog() {
     if (localStorage.token) {
 
       return (
+        <React.Fragment>
         <div className='chatbox'>
           <div className='App'>
 
-              <div className='stage'>
-
                 <h1 className='app-name'><span role="img" aria-label="Fire">🔥</span> LinkedUp Chatroom <span role="img" aria-label="Fire">🔥</span></h1>
 
+
                 <div className='chat-logs'>
-                  { this.renderChatLog() }
+                   <Comment.Group>
+                     { this.renderChatLog() }
+                  </Comment.Group>
                 </div>
-
-                <input
-                  onKeyPress={ (e) => this.handleChatInputKeyPress(e) }
-                  onChange={ (e) => this.updateCurrentChatMessage(e) }
-                  value={ this.state.currentChatMessage }
-                  type='text'
-                  placeholder='Enter your message...'
-                  className='chat-input'
-                  autoFocus={true}/>
-
-                <button
-                  onClick={ (e) => this.handleSendEvent(e) }
-                  className='send'>
-                  Send
-                </button>
-
-              </div>
-
-                <Link to="/splash"><button>Back Home</button></Link>
 
           </div>
 
       </div>
+
+          <Menu fixed="bottom">
+            <Input
+              fluid
+              action={{ icon: 'send', onClick: (e) => this.handleSendEvent(e) } }
+              onKeyPress={ (e) => this.handleChatInputKeyPress(e) }
+              onChange={ (e) => this.updateCurrentChatMessage(e) }
+              value={ this.state.currentChatMessage }
+              type='text'
+              placeholder='Enter your message...'
+              className='chat-input'
+              autoFocus={true}/>
+          </Menu>
+        </React.Fragment>
       );
     } else {
       return <Redirect to="/login" />
