@@ -12,6 +12,7 @@ import { Menu, Input, Comment } from 'semantic-ui-react'
 import ducky from './duck.png'
 import Sound from 'react-sound';
 import messageSound from './message-sound.mp3'
+import moment from 'moment';
 // import { playMessageSound } from './audio'
 
 
@@ -161,7 +162,7 @@ renderChatLog() {
       <Comment.Content>
         <Comment.Author as='a' style={divStyle}>{ el.user }</Comment.Author>
         <Comment.Metadata>
-          <div>sent: { el.created_at }</div>
+          <div>sent at { moment(el.created_at).format('LTS') }</div>
         </Comment.Metadata>
         <Comment.Text>{ el.content }</Comment.Text>
       </Comment.Content>

@@ -61,6 +61,7 @@ export const userLoginFetch = user => {
           // 'message' if there is an error
         } else {
           localStorage.setItem("token", data.jwt);
+          console.log(data.user)
           dispatch(loginUser(data.user))
           dispatch(updateUserStatus(data.user))
         }
@@ -199,7 +200,30 @@ export const deleteUser = (id) => {
   }
 }
 
+export const addLike = (id, currentLikes) => {
 
+  if (currentLikes === null) {
+    currentLikes = 0
+  }
+
+  return (dispatch) => {
+    return fetch (`${server}/api/v1/users/${id}}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        likes: currentLikes + 1
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      dispatch(updateUser(data.user))
+      // window.location = '/profile'
+    })
+  }
+}
 
 
 

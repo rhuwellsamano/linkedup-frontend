@@ -2,14 +2,26 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Card, Icon, Image } from 'semantic-ui-react'
 import avatar from './avatar.png'
+import { addLike } from './actions/index'
 
 
 // const mapStateToProps = state => ({
-//     userFound: state.userFound
+//     current_user: state.current_user
 //   })
 
+const mapDispatchToProps = dispatch => ({
+  addLike: (id, currentLikes) => dispatch(addLike(id, currentLikes))
+})
 
 class UserProfile extends Component {
+
+
+  handleLike = (event) => {
+    console.log(this.state)
+    event.preventDefault()
+    this.props.addLike(this.props.userFound.id, this.props.userFound.likes)
+  }
+
   render() {
     console.log(this.props.userFound)
     const { userFound } = this.props
@@ -21,14 +33,16 @@ class UserProfile extends Component {
             <Card.Content>
               <Card.Header>{ userFound.username }</Card.Header>
               <Card.Meta>
-                <span className='date'>Joined in 2019</span>
+                <span className='date'>Software Engineer</span>
               </Card.Meta>
               <Card.Description>{ userFound.bio }</Card.Description>
             </Card.Content>
             <Card.Content extra>
               <a>
-                <Icon name='user' />
-                22 Friends
+                <div onClick={this.handleLike}>
+                  <Icon name='thumbs up' />
+                    { userFound.likes > 0 ? `${userFound.likes}` : `*crickets*` }
+                </div>
               </a>
             </Card.Content>
           </Card>
@@ -43,4 +57,4 @@ class UserProfile extends Component {
 
 }
 
-export default connect()(UserProfile);
+export default connect(null, mapDispatchToProps)(UserProfile);

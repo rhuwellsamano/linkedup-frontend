@@ -14,8 +14,8 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const options = [
-  { key: 'm', text: 'Male', value: 'male' },
-  { key: 'f', text: 'Female', value: 'female' },
+  { key: 'm', text: 'Avatar 1', value: 'avatar.png' },
+  { key: 'f', text: 'Avatar 2', value: 'female' },
 ]
 
 class EditProfile extends Component {
@@ -57,7 +57,7 @@ class EditProfile extends Component {
           </Form.Group>
           <Form.Button>Submit</Form.Button>
           </Form>
-          <Button onClick={this.handleDelete}>Delete My Account</Button>
+          <Button negative onClick={this.handleDelete}>Delete My Account</Button>
       </div>
     )
   }
