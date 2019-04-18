@@ -68,3 +68,11 @@
 .right {
   float:right;
 }
+
+.profile-div {
+  float: right;
+}
+
+.profile-card {
+  text-align: right;
+}

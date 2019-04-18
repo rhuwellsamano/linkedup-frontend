@@ -11,15 +11,17 @@ export default function reducer(state = initialState, action) {
   switch (action.type) {
     case "LOGIN_USER":
       return {...state, current_user: action.payload}
-      case "LOGOUT_USER":
-        return {...state, current_user: {}}
-      case "LOAD_CHATLOGS":
-        return {...state, chatLogs: action.payload}
-      case "ADD_CHATLOG":
-        console.log('reducer says:', action.payload)
-        return {...state, chatLogs: action.payload}
-      case "TOGGLE_VISIBLE":
-        return {...state, visible: !state.visible}
+    case "UPDATE_USER":
+      return {...state, current_user: action.payload}
+    case "LOGOUT_USER":
+      return {...state, current_user: {}}
+    case "LOAD_CHATLOGS":
+      return {...state, chatLogs: action.payload}
+    case "ADD_CHATLOG":
+      console.log('reducer says:', action.payload)
+      return {...state, chatLogs: action.payload}
+    case "TOGGLE_VISIBLE":
+      return {...state, visible: !state.visible}
     default:
       return state;
   }

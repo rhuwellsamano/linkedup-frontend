@@ -2,7 +2,11 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {userPostFetch} from './actions';
 import { Form } from 'semantic-ui-react'
+import { Redirect } from 'react-router-dom'
 
+const mapStateToProps = state => ({
+  current_user: state.current_user
+})
 
 class Signup extends Component {
   state = {
@@ -22,6 +26,10 @@ class Signup extends Component {
   }
 
   render() {
+    if (localStorage.token) {
+      return <Redirect to="/" />
+    }
+
     return (
       <Form onSubmit={this.handleSubmit}>
         <h1>Sign Up For An Account</h1>
@@ -59,4 +67,4 @@ const mapDispatchToProps = dispatch => ({
   userPostFetch: userInfo => dispatch(userPostFetch(userInfo))
 })
 
-export default connect(null, mapDispatchToProps)(Signup);
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);

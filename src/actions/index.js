@@ -159,10 +159,45 @@ export const toggleVisible = () => ({
 })
 
 
+export const updateUser = (updatedUserObj) => {
+  return (dispatch) => {
+    return fetch (`${server}/api/v1/users/${updatedUserObj.id}}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        username: updatedUserObj.username,
+        bio: updatedUserObj.bio,
+        avatar: updatedUserObj.avatar
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      dispatch(loginUser(data.user))
+      window.location = '/profile'
+    })
+  }
+}
 
-
-
-
+export const deleteUser = (id) => {
+  return dispatch => {
+    return fetch (`${server}/api/v1/users/${id}}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": `Bearer ${localStorage.token}`
+      }
+    })
+    .then(data => {
+      localStorage.removeItem("token")
+      dispatch(logoutUser())
+      window.location = "/login"
+    })
+  }
+}
 
 
 

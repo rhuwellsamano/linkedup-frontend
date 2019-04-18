@@ -10,13 +10,16 @@ import UserStatus from './UserStatus'
 import SidebarExampleSidebar from './Sidebar'
 import { Menu, Input, Comment } from 'semantic-ui-react'
 import ducky from './duck.png'
-
+import Sound from 'react-sound';
+import messageSound from './message-sound.mp3'
+// import { playMessageSound } from './audio'
 
 
 const mapStateToProps = state => {
   return {
     chatLogs: state.chatLogs,
-    current_user: state.current_user
+    current_user: state.current_user,
+    visible: state.visible
   }
 }
 
@@ -41,6 +44,9 @@ const mapDispatchToProps = dispatch => ({
   };
 
 
+
+
+
 class App extends Component {
   _isMounted = false;
 
@@ -51,6 +57,7 @@ class App extends Component {
   }
 
   componentDidMount = () => {
+    console.log("component did mount")
     this.props.getProfileFetch();
     fetch(`http://${serverAddress}:3001/api/v1/users`, {
       method: "GET",
@@ -72,6 +79,12 @@ class App extends Component {
     }
   }
 
+  componentDidUpdate() {
+    if (!this.props.visible && localStorage.token) {
+      this.scrollToBottom();
+    }
+  }
+
   componentWillUnmount() {
     this._isMounted = false;
     this.chats.unsubscribe()
@@ -86,8 +99,33 @@ class App extends Component {
     };
   }
 
+  // detectmob() {
+  //    if(window.innerWidth <= 800 && window.innerHeight <= 600) {
+  //      return true;
+  //    } else {
+  //      return false;
+  //    }
+  // }
+
+  playSound(e) {
+    console.log("sound played")
+    var a = new Audio('https://s3.amazonaws.com/freecodecamp/simonSound2.mp3')
+    if (window.innerWidth >= 800 && window.innerHeight >= 600) {
+      a.play(e);
+    } else {
+      return null
+    }
+    return (
+    <Sound url='https://s3.amazonaws.com/freecodecamp/simonSound2.mp3' playStatus={Sound.status.PLAYING}/>
+    )
+  }
+
+
+
   handleSendEvent(event) {
     event.preventDefault();
+
+
     if (this.state.currentChatMessage === '') {
       console.log("Type something in, first!")
     }
@@ -100,6 +138,9 @@ class App extends Component {
       // playMessageSent()
     };
   }
+
+
+
 
 //   <div>
 //     <li key={`chat_${el.id}`}>
@@ -115,10 +156,10 @@ renderChatLog() {
   return this.props.chatLogs.map((el) => {
     return (
 
-    <Comment key={`chat_{el.id}`}>
+    <Comment key={`chat_${el.id}`}>
       <Comment.Avatar src={ ducky } />
       <Comment.Content>
-        <Comment.Author>{ el.user }</Comment.Author>
+        <Comment.Author as='a' style={divStyle}>{ el.user }</Comment.Author>
         <Comment.Metadata>
           <div>sent: { el.created_at }</div>
         </Comment.Metadata>
@@ -135,6 +176,13 @@ renderChatLog() {
       this.handleSendEvent(event);
     }
   }
+
+
+  scrollToBottom = () => {
+      this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+  }
+
+
 
   createSocket() {
     let cable = Cable.createConsumer(`ws://${serverAddress}:3001/cable`);
@@ -154,6 +202,7 @@ renderChatLog() {
           });
           console.log(chatLogs)
           this.props.addChatLog(chatLogs)
+          this.playSound()
         }
       },
         create: function(chatContent, user) {
@@ -201,18 +250,33 @@ renderChatLog() {
 
                 <div className='chat-logs'>
                    <Comment.Group>
+                     <br></br>
                      { this.renderChatLog() }
+                     <br></br>
+                     <br></br>
+
                   </Comment.Group>
                 </div>
 
+
+
+
           </div>
+
+
+
+
+          <div style={{ float:"left", clear: "both" }}
+               ref={(el) => { this.messagesEnd = el; }}>
+          </div>
+
 
       </div>
 
           <Menu fixed="bottom">
             <Input
               fluid
-              action={{ icon: 'send', onClick: (e) => this.handleSendEvent(e) } }
+              action={{ icon: 'send', onClick: (e) => {this.handleSendEvent(e);       this.playSound(e)} } }
               onKeyPress={ (e) => this.handleChatInputKeyPress(e) }
               onChange={ (e) => this.updateCurrentChatMessage(e) }
               value={ this.state.currentChatMessage }

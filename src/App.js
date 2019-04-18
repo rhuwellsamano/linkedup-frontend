@@ -7,14 +7,16 @@ import {connect} from 'react-redux';
 // import {userLoginFetch} from './actions/index';
 import Navbar from './Navbar'
 import {getProfileFetch} from './actions';
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Link } from "react-router-dom";
 import Chatroom from './Chatroom'
 import Signup from './Signup'
 import Login from './Login'
 import Profile from './Profile'
-import { Button, Header, Icon, Image, Menu, Segment, Sidebar, Sticky } from 'semantic-ui-react'
+import EditProfile from './EditProfile'
+import { Menu, Segment, Sidebar } from 'semantic-ui-react'
 import { serverAddress } from './ServerAddress'
 import { toggleVisible } from './actions'
+import UserProfile from './UserProfile'
 
 
 // import Welcome from './Welcome'
@@ -61,7 +63,7 @@ class App extends Component {
   render() {
     const { visible } = this.props
 
-    let arrayOfOnlineUsers = this.state.userList.map((user, index) => <Menu.Item as="a"> {user.username} : { user.online ? "✅" : "❌" } </Menu.Item>)
+    let arrayOfOnlineUsers = this.state.userList.map((user, index) => <Link to={`/users/${user.id}`}><Menu.Item as="a"> {user.username} : { user.online ? "✅" : "❌" } </Menu.Item></Link>)
 
     return (
       <div>
@@ -70,6 +72,8 @@ class App extends Component {
           <Route component={Navbar} />
         </div>
       </div>
+
+
 <br></br>
   <br></br>
 
@@ -92,7 +96,12 @@ class App extends Component {
               <Sidebar.Pusher>
                 <Segment basic>
                   <Switch>
+                    <Route path="/users/:id" render={routerProps =>{
+                        let userFound = this.state.userList.find(user => user.id === parseInt(routerProps.match.params.id))
+                        return <UserProfile userFound={userFound}/>
+                      } } />
                     <Route path="/profile" component={Profile} />
+                    <Route path="/edit" component={EditProfile}/>
                     <Route path="/signup" component={Signup} />
                     <Route path="/login" component={Login} />
                     <Route exact path="/" component={Chatroom} />
